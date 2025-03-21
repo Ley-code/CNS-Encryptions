@@ -1,11 +1,11 @@
 # 🔐 CNS-Encryptions
 
-This project is a simple **encryption and decryption tool** that supports **OTP (One-Time Pad) and 3DES (Triple DES)** algorithms. It includes a **React-based frontend** and a **Node.js backend**.
+This project is a simple **encryption and decryption tool** that supports **OTP (One-Time Pad), 3DES (Triple DES) and AES** algorithms. It includes a **React-based frontend** and a **Node.js backend**.
 
 ---
 
 ## 📌 Features
-- Encrypt and decrypt messages using **OTP** and **3DES**.
+- Encrypt and decrypt messages using **OTP**, **3DES** and **AES**.
 - Interactive and user-friendly **React UI**.
 - Secure key-based encryption.
 - Simple setup and easy to use.
@@ -51,7 +51,7 @@ npm run dev
 ## 🛠 Technologies Used
 Frontend: React, TypeScript, TailwindCSS
 Backend: Node.js, Express
-Encryption Algorithms: OTP, 3DES
+Encryption Algorithms: OTP, 3DES, AES
 
 ## 🤝 Contributing
 Contributions are welcome! Follow these steps to contribute:
