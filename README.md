@@ -57,8 +57,8 @@ Encryption Algorithms: OTP, 3DES
 Contributions are welcome! Follow these steps to contribute:
 
 Fork the repository.
-Create a new branch `git checkout -b feature-branch`.
-Commit your changes `git commit -m "Added a new feature"`.
-Push to your branch `git push origin feature-branch`.
-Submit a pull request.
+- Create a new branch `git checkout -b feature-branch`.
+- Commit your changes `git commit -m "Added a new feature"`.
+- Push to your branch `git push origin feature-branch`.
+- Submit a pull request.
 
