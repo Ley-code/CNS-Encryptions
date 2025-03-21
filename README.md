@@ -19,4 +19,46 @@ Run the following command to clone the repository:
 
 ```sh
 git clone https://github.com/your-username/encryption-tool.git
-cd encryption-tool
+cd CNS-Encryptions
+```
+## 2️⃣ Install Dependencies
+
+Before running the project, install the required dependencies:
+
+```sh
+npm install
+```
+## 🖥 Running the Project
+
+▶ Start the Backend
+Navigate to the backend folder and start the server:
+
+```sh
+cd encryption_backend
+npm install
+npm run start:dev
+```
+
+▶ Start the Frontend
+Navigate to the frontend folder and start the UI:
+
+```sh
+cd encryption_frontend
+npm install
+npm run dev
+```
+
+## 🛠 Technologies Used
+Frontend: React, TypeScript, TailwindCSS
+Backend: Node.js, Express
+Encryption Algorithms: OTP, 3DES
+
+## 🤝 Contributing
+Contributions are welcome! Follow these steps to contribute:
+
+Fork the repository.
+Create a new branch `git checkout -b feature-branch`.
+Commit your changes `git commit -m "Added a new feature"`.
+Push to your branch `git push origin feature-branch`.
+Submit a pull request.
+
