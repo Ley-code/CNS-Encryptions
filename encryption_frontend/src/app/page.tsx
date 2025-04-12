@@ -23,53 +23,46 @@ export default function EncryptionTool() {
   const [algorithm, setAlgorithm] = useState("OTP")
   const [isLoading, setIsLoading] = useState(false)
 
-  // Function placeholders for API calls - to be implemented by the user
-  const handleEncrypt = () => {
-    // Placeholder for API call
-    setIsLoading(true)
-    // You would replace this with your actual API call
-    setTimeout(() => {
-      setIsLoading(false)
-      const requestBody = {
-        type_of_encryption : algorithm,
-        decryption_key : encryptionKey,
-        text : messageToEncrypt,
-        task : "encrypt"
-      }
-      postEncryptionDecryption(requestBody).then((result: { result: any }) => {
-        const jsonObject = JSON.parse(JSON.stringify(result.result));
-        const encryptedText = jsonObject.result;
-        console.log(encryptedText);
-        setEncryptedMessage(encryptedText);
-      }).catch((error) => {
-        console.error("Error during encryption:", error);
-      });
+  // Check if key input should be shown (for non-RSA algorithms)
+  const showKeyInput = algorithm !== "RSA"
 
-    }, 500)
+  const handleEncrypt = () => {
+    setIsLoading(true)
+    const requestBody = {
+      type_of_encryption: algorithm,
+      key: showKeyInput ? encryptionKey : "", // Send key only if needed
+      text: messageToEncrypt,
+      task: "encrypt",
+    }
+
+    console.log(requestBody)
+    postEncryptionDecryption(requestBody)
+      .then((result: { result: string}) => {
+        const encryptedText = result.result || ""
+        setEncryptedMessage(encryptedText)
+      })
+      .catch((error) => console.error("Error during encryption:", error))
+      .finally(() => setIsLoading(false))
   }
 
   const handleDecrypt = () => {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      const requestBody = {
-        type_of_encryption : algorithm,
-        decryption_key : decryptionKey,
-        text : messageToDecrypt,
-        task : "decrypt"
-      }
-      postEncryptionDecryption(requestBody).then((result: { result: any }) => {
-        const jsonObject = JSON.parse(JSON.stringify(result.result));
-        const decryptedText = jsonObject.result;
-        console.log(decryptedText);
-        setDecryptedMessage(decryptedText);
-      }).catch((error) => {
-        console.error("Error during encryption:", error);
-      });
-    }, 500)
+    const requestBody = {
+      type_of_encryption: algorithm,
+      key: showKeyInput ? decryptionKey : "", // Send key only if needed
+      text: messageToDecrypt,
+      task: "decrypt",
+    }
+    postEncryptionDecryption(requestBody)
+      .then((result: { result: any }) => {
+        const decryptedText = result.result || ""
+        setDecryptedMessage(decryptedText)
+      })
+      .catch((error) => console.error("Error during decryption:", error))
+      .finally(() => setIsLoading(false))
   }
 
-  const copyToClipboard = (text: string, type: string) => {
+  const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
   }
 
@@ -90,7 +83,7 @@ export default function EncryptionTool() {
               <Lock className="h-5 w-5 text-red-600" />
               Encryption
             </CardTitle>
-            <CardDescription>Enter your message and encryption key</CardDescription>
+            <CardDescription>Enter your message {showKeyInput ? "and encryption key" : ""}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -103,26 +96,28 @@ export default function EncryptionTool() {
                 onChange={(e) => setMessageToEncrypt(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="encryptionKey">Encryption Key</Label>
-              <Input
-                id="encryptionKey"
-                placeholder="Enter your encryption key..."
-                value={encryptionKey}
-                onChange={(e) => setEncryptionKey(e.target.value)}
-              />
-            </div>
+            {showKeyInput && (
+              <div className="space-y-2">
+                <Label htmlFor="encryptionKey">Encryption Key</Label>
+                <Input
+                  id="encryptionKey"
+                  placeholder="Enter your encryption key..."
+                  value={encryptionKey}
+                  onChange={(e) => setEncryptionKey(e.target.value)}
+                />
+              </div>
+            )}
             <div className="flex gap-2">
               <Button
                 className="flex-1 bg-red-600 hover:bg-red-700"
                 onClick={handleEncrypt}
-                disabled={!messageToEncrypt || !encryptionKey || isLoading}
+                disabled={!messageToEncrypt || (showKeyInput && !encryptionKey) || isLoading}
               >
                 {isLoading ? "Encrypting..." : "Encrypt"}
               </Button>
               <Button
                 variant="outline"
-                onClick={() => copyToClipboard(encryptedMessage, "Encrypted message")}
+                onClick={() => copyToClipboard(encryptedMessage)}
                 disabled={!encryptedMessage}
               >
                 <Copy className="h-4 w-4 mr-2" />
@@ -149,7 +144,7 @@ export default function EncryptionTool() {
               <Unlock className="h-5 w-5 text-red-600" />
               Decryption
             </CardTitle>
-            <CardDescription>Enter encrypted message and decryption key</CardDescription>
+            <CardDescription>Enter encrypted message {showKeyInput ? "and decryption key" : ""}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -162,26 +157,28 @@ export default function EncryptionTool() {
                 onChange={(e) => setMessageToDecrypt(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="decryptionKey">Decryption Key</Label>
-              <Input
-                id="decryptionKey"
-                placeholder="Enter your decryption key..."
-                value={decryptionKey}
-                onChange={(e) => setDecryptionKey(e.target.value)}
-              />
-            </div>
+            {showKeyInput && (
+              <div className="space-y-2">
+                <Label htmlFor="decryptionKey">Decryption Key</Label>
+                <Input
+                  id="decryptionKey"
+                  placeholder="Enter your decryption key..."
+                  value={decryptionKey}
+                  onChange={(e) => setDecryptionKey(e.target.value)}
+                />
+              </div>
+            )}
             <div className="flex gap-2">
               <Button
                 className="flex-1 bg-red-600 hover:bg-red-700"
                 onClick={handleDecrypt}
-                disabled={!messageToDecrypt || !decryptionKey || isLoading}
+                disabled={!messageToDecrypt || (showKeyInput && !decryptionKey) || isLoading}
               >
                 {isLoading ? "Decrypting..." : "Decrypt"}
               </Button>
               <Button
                 variant="outline"
-                onClick={() => copyToClipboard(decryptedMessage, "Decrypted message")}
+                onClick={() => copyToClipboard(decryptedMessage)}
                 disabled={!decryptedMessage}
               >
                 <Copy className="h-4 w-4 mr-2" />
@@ -208,32 +205,19 @@ export default function EncryptionTool() {
           <CardTitle className="text-center">Encryption Algorithm</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="max-w-md mx-auto">
-            <Select value={algorithm} onValueChange={setAlgorithm}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select encryption algorithm" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="OTP">One-time pad (OTP)</SelectItem>
-                <SelectItem value="3DES">3DES Encryption</SelectItem>
-                <SelectItem value="AES">AES Encryption</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="mt-4 text-center text-sm text-muted-foreground">
-              <p>
-                Current algorithm:{" "}
-                {algorithm === "OTP"
-                  ? "One-time pad (OTP)"
-                  : algorithm === "3DES"
-                    ? "3DES Encryption"
-                    : "AES Encryption"}
-              </p>
-            </div>
-          </div>
+          <Select value={algorithm} onValueChange={setAlgorithm}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select encryption algorithm" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="OTP">One-time pad (OTP)</SelectItem>
+              <SelectItem value="3DES">3DES Encryption</SelectItem>
+              <SelectItem value="AES">AES Encryption</SelectItem>
+              <SelectItem value="RSA">RSA Encryption</SelectItem>
+            </SelectContent>
+          </Select>
         </CardContent>
       </Card>
     </div>
   )
 }
-
