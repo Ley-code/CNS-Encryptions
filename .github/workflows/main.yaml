@@ -1,7 +1,10 @@
-name: Test Project
+name: Backend CI
 
 on:
   pull_request:
+    paths:
+      - 'encryption_backend/**'
+      - 'encryption_frontend/**'
     branches:
       - main
 
