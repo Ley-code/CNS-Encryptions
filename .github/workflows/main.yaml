@@ -1,14 +1,15 @@
-name: Backend CI
+name: CI Pipeline
 
 on:
   pull_request:
     paths:
       - 'encryption_backend/**'
+      - 'encryption_frontend/**'
     branches:
       - main
 
 jobs:
-  test:
+  backend-test:
     runs-on: ubuntu-latest
     container:
       image: node:23
@@ -21,8 +22,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: npm install
 
-      - name: Run backend dev server
+      - name: Build backend
+        run: npm run build
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    container:
+      image: node:23
+
+    defaults:
+      run:
+        working-directory: encryption_frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build frontend
         run: npm run build
