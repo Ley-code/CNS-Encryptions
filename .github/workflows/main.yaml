@@ -25,4 +25,4 @@ jobs:
         run: npm install
 
       - name: Run backend dev server
-        run: npm run start:dev
+        run: npm run build
