@@ -1,7 +1,10 @@
-name: Test Project
+name: Backend CI
 
 on:
   pull_request:
+    paths:
+      - 'encryption_backend/**'
+      - 'encryption_frontend/**'
     branches:
       - main
 
@@ -14,5 +17,5 @@ jobs:
       - uses: actions/checkout@v3
         with:
           node-version: 23
-      - run: npm ci
+      - run: npm install
       - run: npm run dev
