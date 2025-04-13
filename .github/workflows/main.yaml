@@ -4,7 +4,6 @@ on:
   pull_request:
     paths:
       - 'encryption_backend/**'
-      - 'encryption_frontend/**'
     branches:
       - main
 
@@ -13,9 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: node:23
+
+    defaults:
+      run:
+        working-directory: encryption_backend
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          node-version: 23
-      - run: npm install
-      - run: npm run dev
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run backend dev server
+        run: npm run build
