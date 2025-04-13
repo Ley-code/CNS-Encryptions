@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Copy, Lock, Unlock } from "lucide-react"
-import { toast } from "@/hooks/use-toast"
 
 export default function EncryptionTool() {
   // State for form inputs and outputs
@@ -31,10 +30,7 @@ export default function EncryptionTool() {
     setTimeout(() => {
       setIsLoading(false)
       // This is where you would set the encrypted message from the API response
-      toast({
-        title: "API Integration Required",
-        description: "Connect this to your encryption endpoint.",
-      })
+   
     }, 500)
   }
 
@@ -45,19 +41,13 @@ export default function EncryptionTool() {
     setTimeout(() => {
       setIsLoading(false)
       // This is where you would set the decrypted message from the API response
-      toast({
-        title: "API Integration Required",
-        description: "Connect this to your decryption endpoint.",
-      })
+
     }, 500)
   }
 
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text)
-    toast({
-      title: "Copied to clipboard",
-      description: `${type} has been copied to your clipboard.`,
-    })
+
   }
 
   return (
